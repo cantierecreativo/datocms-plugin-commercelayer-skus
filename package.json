@@ -12,8 +12,17 @@
     "lint": "eslint \"./src/*.{js,jsx}\"",
     "test": "echo 1"
   },
-  "keywords": ["datocms","datocms-plugin","field-addon","string-field","commerce-layer"],
-  "files": ["dist", "docs"],
+  "keywords": [
+    "datocms",
+    "datocms-plugin",
+    "field-editor",
+    "string-field",
+    "commerce-layer"
+  ],
+  "files": [
+    "dist",
+    "docs"
+  ],
   "author": "CantiereCreativo <info@cantierecrativo.net>",
   "license": "ISC",
   "datoCmsPlugin": {
@@ -21,73 +30,67 @@
     "previewImage": "docs/preview.gif",
     "coverImage": "docs/cover.png",
     "entryPoint": "dist/index.html",
-    "pluginType": "field_addon",
-    "fieldTypes": ["string"],
+    "pluginType": "field_editor",
+    "fieldTypes": [
+      "json"
+    ],
     "parameters": {
-  "global": [
-    {
-      "id": "endpoint",
-      "label": "Commerce Layer App Endpoint",
-      "type": "string",
-      "required": true,
-      "default": "",
-      "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
-    },
-    {
-      "id": "clientId",
-      "label": "Commerce Layer Integration Client ID",
-      "type": "string",
-      "required": true,
-      "default": "",
-      "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
-    },
-    {
-      "id": "clientSecret",
-      "label": "Commerce Layer Integration Client Secret",
-      "type": "string",
-      "required": true,
-      "default": "",
-      "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
+      "global": [
+        {
+          "id": "endpoint",
+          "label": "Commerce Layer App Endpoint",
+          "type": "string",
+          "required": true,
+          "default": "",
+          "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
+        },
+        {
+          "id": "clientId",
+          "label": "Commerce Layer Integration Client ID",
+          "type": "string",
+          "required": true,
+          "default": "",
+          "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
+        },
+        {
+          "id": "clientSecret",
+          "label": "Commerce Layer Integration Client Secret",
+          "type": "string",
+          "required": true,
+          "default": "",
+          "hint": "You can obtain this from your CommerceLayer dashboard crating an App of type Integration"
+        }
+      ],
+      "instance": [
+        {
+          "id": "sku_prefix",
+          "label": "Product's SKU Prefix",
+          "type": "string",
+          "required": false,
+          "default": ""
+        }
+      ]
     }
-  ],
-  "instance": [
-    {
-      "id": "sku",
-      "label": "Product's SKU code, must be an unique value",
-      "type": "string",
-      "required": true,
-      "default": ""
-    },
-    {
-      "id": "amount",
-      "label": "Product's Default Price amount",
-      "type": "string",
-      "required": true,
-      "default": ""
-    }
-  ]
-}
   },
   "devDependencies": {
-    
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-react": "^7.11.0",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
-    "@babel/preset-react": "^7.0.0",
-    
     "@babel/cli": "^7.0.0-beta.54",
     "@babel/core": "^7.0.0-beta.54",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/preset-env": "^7.0.0-beta.54",
-    "@babel/register": "^7.0.0-beta.54", "babel-eslint": "^8.2.6",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0-beta.54",
+    "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.0-beta",
     "css-loader": "^1.0.0",
     "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-loader": "^2.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
     "generator-datocms-plugin": "^1.0.24",
     "html-webpack-inline-source-plugin": "^0.0.10",
     "html-webpack-plugin": "^3.2.0",
@@ -102,12 +105,16 @@
     "yo": "^3.1.1"
   },
   "dependencies": {
-    
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/runtime": "^7.12.1",
+    "@commercelayer/js-auth": "^2.0.2",
+    "@commercelayer/js-sdk": "^3.0.0",
     "classname": "^0.0.0",
+    "html-webpack-tags-plugin": "^2.0.17",
+    "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "prop-types": "^15.6.2",
-    
-    "html-webpack-tags-plugin": "^2.0.17"
+    "react-hook-form": "^6.9.5",
+    "yup": "^0.29.3"
   }
 }
