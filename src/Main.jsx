@@ -1,10 +1,10 @@
-import React, { useState, Fragment } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, Fragment, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 // import { EvalSourceMapDevToolPlugin } from "webpack";
-import * as yup from "yup";
-import connectToDatoCms from "./connectToDatoCms";
-import { getToken, upsertSku, getLinks, isExpired } from "./lib/cl";
-import "./style.sass";
+import * as yup from 'yup';
+import connectToDatoCms from './connectToDatoCms';
+import { getToken, upsertSku, getLinks, isExpired } from './lib/cl';
+import './style.sass';
 
 function Main({ plugin, fieldValue }) {
   // const { prefix } = plugin.parameters.instance;
@@ -18,26 +18,41 @@ function Main({ plugin, fieldValue }) {
   const schema = yup.object().shape({
     id: yup.string(),
     reference: yup.string(),
-    code: yup.string().required("SKU Code is required!"),
-    name: yup.string().required("Product Name is required!"),
+    code: yup.string().required('SKU Code is required!'),
+    name: yup.string().required('Product Name is required!'),
   });
 
-  if (plugin.itemStatus === "new") {
+  if (plugin.itemStatus === 'new') {
     return <div>Save the record a first time.</div>;
   }
-  const savedData = fieldValue ? JSON.parse(fieldValue) : null;
-  const defaultValues = {
-    name: savedData?.name,
-    code: savedData?.code,
-    id: savedData?.id,
-    reference:
-      savedData && savedData.reference ? savedData.reference : plugin.itemId,
-  };
-  const links = getLinks(savedData?.code);
+  const { itemId } = plugin;
+  const [savedData, setSavedData] = useState(null);
+  const [defaultValues, setDefaultValues] = useState({
+    id: '',
+    reference: itemId,
+    code: '',
+    name: '',
+  });
+
   const { register, handleSubmit, errors, reset } = useForm({
     validationSchema: schema,
     defaultValues,
   });
+
+  useEffect(() => {
+    if (fieldValue) {
+      const saved = JSON.parse(fieldValue);
+      setSavedData(saved);
+      const values = {
+        id: saved?.id,
+        reference: itemId,
+        code: saved?.code,
+        name: saved?.name,
+      };
+      setDefaultValues(values);
+      reset(values);
+    }
+  }, [fieldValue, itemId]);
 
   const saveToCommerceLayer = async (data) => {
     setLoading(true);
@@ -49,17 +64,17 @@ function Main({ plugin, fieldValue }) {
       }
       const payload = { ...data };
       const skuData = await upsertSku(payload);
-      console.log("skuData", skuData);
+      console.log('skuData', skuData);
       if (skuData) {
         const { name, code, id } = skuData;
-        reset(skuData);
+        // reset(skuData);
         plugin.setFieldValue(
           plugin.fieldPath,
           JSON.stringify({ ...payload, name, code, id })
         );
       } else {
-        setError("OPS something gone wrong.");
-        reset(skuData);
+        setError('OPS something gone wrong.');
+        // reset(skuData);
       }
     } catch (err) {
       console.error(err);
@@ -70,10 +85,11 @@ function Main({ plugin, fieldValue }) {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log('TO CL DATA', data);
     saveToCommerceLayer(data);
   };
 
+  const links = getLinks(savedData?.id);
   return (
     <div className="container">
       {error && <div className="error">{error}</div>}
@@ -82,10 +98,10 @@ function Main({ plugin, fieldValue }) {
         <Fragment>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="label">CL ID</div>
-            <input name="id" type="text" disabled ref={register()} />
+            <input name="id" type="hidden" ref={register()} />
 
             <div className="label">DATO ID</div>
-            <input name="reference" type="text" disabled ref={register()} />
+            <input name="reference" type="hidden" ref={register()} />
 
             <div className="label">SKU Code</div>
             <input
@@ -112,7 +128,7 @@ function Main({ plugin, fieldValue }) {
         </Fragment>
       )}
 
-      <div style={{ marginTop: 20, backgroundColor: "#efefef" }}>
+      <div style={{ marginTop: 20, backgroundColor: '#efefef' }}>
         {Object.keys(links).map((k) => {
           return (
             <p key={k}>
@@ -128,12 +144,13 @@ function Main({ plugin, fieldValue }) {
         })}
       </div>
 
-      <div style={{ marginTop: 20, backgroundColor: "#efefef" }}>
-        <pre>
-          <small>{`${JSON.stringify(savedData, null, 2)}`}</small>
-        </pre>
-        <p>{`RECORD ID = ${plugin.itemId}`}</p>
-      </div>
+      {savedData && (
+        <div style={{ marginTop: 20, backgroundColor: '#efefef' }}>
+          <pre>
+            <small>{`${JSON.stringify(savedData, null, 2)}`}</small>
+          </pre>
+        </div>
+      )}
     </div>
   );
 }
