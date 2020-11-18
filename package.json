@@ -9,6 +9,7 @@
     "dist": "NODE_ENV=production webpack --progress",
     "addToProject": "yo datocms-plugin:add-to-project",
     "prepublishOnly": "rimraf lib dist && mkdir dist && npm run dist",
+    "build": "rimraf lib dist && mkdir dist && npm run dist",
     "lint": "eslint \"./src/*.{js,jsx}\"",
     "test": "echo 1"
   },
